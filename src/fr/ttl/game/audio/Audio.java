@@ -3,6 +3,7 @@ package fr.ttl.game.audio;
 import java.util.Arrays;
 
 import fr.ttl.game.Game;
+import fr.ttl.game.display.Textures;
 
 public class Audio {
 
@@ -33,6 +34,8 @@ public class Audio {
 		if(ENEMY_TRADE_NOT_ENOUGH.length != Game.WORLD_COUNT)
 			throw new IllegalStateException();
 		if(NARATOR_DIALOGS.length != Game.WORLD_COUNT)
+			throw new IllegalStateException();
+		if(Textures.DEATH_TEXTS.length != SFX_DEATH.length)
 			throw new IllegalStateException();
 	}
 	

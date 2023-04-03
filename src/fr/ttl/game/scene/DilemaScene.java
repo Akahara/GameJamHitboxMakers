@@ -90,7 +90,7 @@ public class DilemaScene extends Scene {
 	private void playResponse() {
 		canInteract = false;
 		decay = 0;
-		Player.gauges[selectedResponse] = Math.min(Player.gauges[selectedResponse]+3, Player.GAUGE_MAX);
+		Player.gauges[selectedResponse] = Math.min(Player.gauges[selectedResponse]+1, Player.GAUGE_MAX);
 		SceneManager.switchScene(new WorldScene());
 	}
 

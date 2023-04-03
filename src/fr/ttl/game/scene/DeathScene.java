@@ -14,13 +14,16 @@ import fr.ttl.game.math.Utils;
 public class DeathScene extends Scene {
 
 	float time = 0;
-	Texture textTexture = Player.loop < Textures.DEATH_TEXTS.length ? Textures.DEATH_TEXTS[Player.loop] : Mathr.randIn(Textures.DEATH_TEXTS);
+	Texture textTexture;
 	float textSize = .01f;
-	
-	Sound narrated = Mathr.randIn(Audio.SFX_DEATH);
+	Sound narrated;
 	
 	@Override
 	public void initScene() {
+		int r = Player.loop < Textures.DEATH_TEXTS.length ? Player.loop : Mathr.randRange(0, Textures.DEATH_TEXTS.length);
+		textTexture = Textures.DEATH_TEXTS[r];
+		narrated = Audio.SFX_DEATH[r];
+		
 		Player.loop++;
 		Utils.later(() -> {
 			Audio.SOURCE_SFX.play(narrated);
@@ -28,7 +31,7 @@ public class DeathScene extends Scene {
 				Player.reset();
 				SceneManager.switchScene(new WorldScene());
 			}, narrated.getDuration() + 1);
-		}, SceneManager.TRANSITION_DURATION);
+		}, 3);
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class DeathScene extends Scene {
 	@Override
 	public void render(double currentTime) {
 		Renderer.setCamera(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1);
-		float alpha = Mathf.windowPass(time, 1, narrated.getDuration(), 1);
+		float alpha = Mathf.windowPass(time-2, 1, narrated.getDuration(), 1);
 		alpha = (float)Math.sqrt(alpha);
 		Renderer.drawQuad(
 				(SCREEN_WIDTH-textSize*textTexture.width)*.5f,

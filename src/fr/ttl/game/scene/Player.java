@@ -1,6 +1,7 @@
 package fr.ttl.game.scene;
 
 import fr.ttl.game.Game;
+import fr.ttl.game.audio.Audio;
 import fr.ttl.game.display.Renderer;
 
 public class Player {
@@ -25,6 +26,7 @@ public class Player {
 		
 		Renderer.BLIT_SHADER.bind();
 		Renderer.BLIT_SHADER.setUniform1f("u_minResource", GAUGE_MAX);
+		Audio.SOURCE_LOW_RESOURCES.setVolume(0);
 	}
 	
 	

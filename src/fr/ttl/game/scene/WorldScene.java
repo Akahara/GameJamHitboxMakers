@@ -37,15 +37,13 @@ public class WorldScene extends Scene {
 		Audio.SOURCE_MUSIC.crossFade(Audio.MUSIC_OVERWORLDS[Player.worldId]);
 		narator.loadDialog(Player.worldId);
 		
-		Player.visitedWorldCounts[Player.worldId]++;
-		
 		if(Player.worldId == 0)
 			Audio.SOURCE_WATER.play();
 		
 		playerSpeed = SCREEN_WIDTH * 5 / narator.speech.getDuration();
 
 		Texture prev = null;
-		for(int i = -6; i < 30; i++) {
+		for(int i = -6; i < 28; i++) {
 			ParalaxItem item = new ParalaxItem(true, Mathf.random()*2 + 4*i);
 			do {
 				item.texture = Mathr.randIn(Textures.PARALAX_ITEMS[Player.worldId]);
@@ -66,7 +64,7 @@ public class WorldScene extends Scene {
 			narator.trigger();
 		}));
 		// next scene trigger
-		remainingTriggers.add(new Trigger(SCREEN_WIDTH*5.7f, () -> {
+		remainingTriggers.add(new Trigger(SCREEN_WIDTH*5.5f, () -> {
 			SceneManager.switchScene(new CombatScene());
 			playerXKeyVel = 0;
 			
@@ -97,7 +95,7 @@ public class WorldScene extends Scene {
 		
 		// trigger triggers
 		for(int i = 0; i < remainingTriggers.size(); i++) {
-			var t = remainingTriggers.get(i);
+			Trigger t = remainingTriggers.get(i);
 			if(playerX > t.playerXThreshold)
 				remainingTriggers.remove(i--).action.run();
 		}
@@ -126,7 +124,7 @@ public class WorldScene extends Scene {
 			Renderer.drawQuad(-5, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Textures.LEVEL_2_BEGINING);
 		
 		Texture playerFrame = Math.abs(playerXVel) < .1f ?
-				Textures.PLAYER_FRAMES[0] :
+				Textures.PLAYER_FRAMES[Textures.PLAYER_FRAMES.length-1] :
 				Utils.pickAnim(Textures.PLAYER_FRAMES, (float)currentTime, .3f);
 		Renderer.drawQuad(playerX, playerY, SCREEN_WIDTH*playerFrame.width/160, SCREEN_HEIGHT/90*playerFrame.height, playerIsForward?0:1, 0, playerIsForward?1:-1, 1, playerFrame);
 		

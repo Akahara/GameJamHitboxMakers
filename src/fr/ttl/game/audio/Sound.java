@@ -75,7 +75,7 @@ public class Sound {
 		if(sounds.isEmpty())
 			throw new IllegalArgumentException("Could not load " + path);
 		Logger.log("Loaded " + sounds.size() + " sounds for '" + path + "'");
-		return sounds.toArray(Sound[]::new);
+		return sounds.toArray(new Sound[sounds.size()]);
 	}
 	
 	private static Sound loadVorbisSound(String resourcePath) throws IOException {

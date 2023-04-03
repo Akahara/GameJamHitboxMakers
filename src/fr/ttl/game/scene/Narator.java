@@ -42,7 +42,8 @@ public class Narator {
 		try (InputStream is = Narator.class.getResourceAsStream(timestampPath)) {
 			if(is == null)
 				throw new IllegalArgumentException("no could not find timestamps at '" + timestampPath + "'");
-			String[] lines = new String(is.readAllBytes()).trim().split("\n");
+			
+			String[] lines = Main.readStream(is).trim().split("\n");
 			for(int i = 0; i < lines.length; i++) {
 				String[] parts = lines[i].split(" ");
 				float tsIn = Float.parseFloat(parts[0]);

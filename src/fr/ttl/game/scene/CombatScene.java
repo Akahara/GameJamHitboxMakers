@@ -41,7 +41,7 @@ public class CombatScene extends Scene {
 			new Enemy(Textures.TRADERS[1], 30, new float[] { 3, 5, 8 }),
 			new Enemy(Textures.TRADERS[2], 30, new float[] { 8, 3, 5 }),
 			new Enemy(Textures.TRADERS[3], 30, new float[] { 7, 2, 7 }),
-			new Enemy(Textures.TRADERS[4], 30, new float[] { 6, 6, 6 }),
+			new Enemy(Textures.TRADERS[4], 35, new float[] { 6, 6, 6 }),
 	};
 	
 	@Override
@@ -49,8 +49,13 @@ public class CombatScene extends Scene {
 		worldId = Player.worldId;
 		enemy = enemies[worldId];
 		Audio.SOURCE_MUSIC.crossFade(Audio.MUSIC_COMBATS);
-		traderSpeechSource = Audio.SOURCE_SFX.play(Audio.ENEMY_TRADE_ENCOUNTERS[worldId]);
-		Utils.later(() -> canInteract = true, Audio.ENEMY_TRADE_ENCOUNTERS[worldId].getDuration());
+		if(Player.visitedWorldCounts[worldId] == 0) {
+			traderSpeechSource = Audio.SOURCE_SFX.play(Audio.ENEMY_TRADE_ENCOUNTERS[worldId]);
+			Utils.later(() -> canInteract = true, Audio.ENEMY_TRADE_ENCOUNTERS[worldId].getDuration());
+		} else {
+			canInteract = true;
+		}
+		Player.visitedWorldCounts[Player.worldId]++;
 	}
 
 	@Override
@@ -89,9 +94,9 @@ public class CombatScene extends Scene {
 			float textScale = .005f;
 			float boxWidth = tex.width * textScale;
 			float boxHeight = boxWidth*tex.height/tex.width;
-			Renderer.drawQuad(margin+.01f, y-boxHeight*.5f, boxWidth, boxHeight, tex);
 			Renderer.drawQuad(margin, y-slotHeight*.5f, slotWidth*(Player.GAUGE_MAX-gaugeFillLevels[i]), slotHeight, c);
 			Renderer.drawQuad(available-margin-btnWidth, y-btnHeight*.5f, btnWidth, btnHeight, Textures.CURSOR, GAUGE_COLORS[i]);
+			Renderer.drawQuad(margin+.01f, y-boxHeight*.5f, boxWidth, boxHeight, tex);
 
 		}
 		
@@ -126,8 +131,10 @@ public class CombatScene extends Scene {
 			Renderer.drawQuad(SCREEN_WIDTH*3/4f-boxWidth*.5f, traderHeight + .15f, boxWidth, boxHeight, textTexture);
 		}
 		
+		float minFillLevel = Mathf.min(gaugeFillLevels);
 		Renderer.BLIT_SHADER.bind();
-		Renderer.BLIT_SHADER.setUniform1f("u_minResource", Mathf.min(gaugeFillLevels));
+		Renderer.BLIT_SHADER.setUniform1f("u_minResource", minFillLevel);
+		Audio.SOURCE_LOW_RESOURCES.setVolume(Mathf.clamp(1.5f-minFillLevel*.5f, 0, 1));
 		
 		float y = SCREEN_HEIGHT*.9f - cursorPosition * btnHeight*1.1f;
 		Renderer.drawCursor(available-margin-btnWidth*.5f, y);
@@ -153,7 +160,7 @@ public class CombatScene extends Scene {
 		for(int r = 0; r < Player.GAUGE_COUNT; r++)
 			total += givenResources[r] * enemy.queryWeights[r];
 		
-		if(total > enemy.queriedTotal) {
+		if(total >= enemy.queriedTotal) {
 			Sound sfx = Audio.ENEMY_TRADE_SUCCESS[worldId];
 			if(sfx != null)
 				traderSpeechSource = Audio.SOURCE_SFX.play(sfx);

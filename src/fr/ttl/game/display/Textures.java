@@ -2,6 +2,7 @@ package fr.ttl.game.display;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fr.ttl.game.Logger;
@@ -44,7 +45,7 @@ public class Textures {
 		for(Texture[] tt : DILEMA_TEXTS)
 			for(Texture t : tt)
 				t.enableAntialiasing();
-		for(Texture t : List.of(NOISE, CURSOR))
+		for(Texture t : Arrays.asList(NOISE, CURSOR))
 			t.enableAntialiasing();
 		SNOW.enableWrapping();
 	}
@@ -66,7 +67,7 @@ public class Textures {
     		textures.add(Texture.DUMMY_TEXTURE);
     		Logger.err("No texture found using " + path);
     	}
-    	return textures.toArray(Texture[]::new);
+    	return textures.toArray(new Texture[textures.size()]);
     }
     
     private static Texture[] loadTextures(String path) {

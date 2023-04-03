@@ -23,6 +23,7 @@ public class MainMenuScene extends Scene {
 	@Override
 	public void render(double currentTime) {
 		Renderer.setCamera(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1, 1);
+		Renderer.drawQuad(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Textures.LEVEL_BBG[2]);
 		Renderer.drawQuad(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Textures.MENU_BG);
 	}
 

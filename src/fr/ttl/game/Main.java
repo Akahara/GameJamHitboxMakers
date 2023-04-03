@@ -1,17 +1,22 @@
 package fr.ttl.game;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import fr.ttl.game.audio.Audio;
 import fr.ttl.game.audio.AudioManager;
 import fr.ttl.game.display.WindowManager;
 import fr.ttl.game.io.PlayerInputs;
 import fr.ttl.game.math.Utils;
-import fr.ttl.game.scene.WorldScene;
+import fr.ttl.game.scene.MainMenuScene;
 
 public class Main {
 
 	private static long firstMillis = System.currentTimeMillis();
 	
 	private static final int TARGET_FPS = 120;
+	
+	public static byte[] bigBuf = new byte[10000];
 
 	public static void main(String[] args) {
 		WindowManager.createWindow("Hell's alley");
@@ -22,14 +27,17 @@ public class Main {
         
         Audio.SOURCE_MUSIC.play();
 
-//        Player.worldId = 4;
-//        Player.gauges[0] = 2;
-//        SceneManager.switchScene(new MainMenuScene());
-        SceneManager.switchScene(new WorldScene());
+//        Player.worldId = 0;
+//        Player.visitedWorldCounts[0]++;
+//        Player.gauges[0] = 3;
+        SceneManager.switchScene(new MainMenuScene());
+//        SceneManager.switchScene(new WorldScene());
 //		SceneManager.switchScene(new CombatScene());
 //        SceneManager.switchScene(new EndScreen(1));
 //        SceneManager.switchScene(new DeathScene());
 //		SceneManager.switchScene(new DilemaScene(0));
+		
+		Audio.SOURCE_LOW_RESOURCES.play();
 
 		long nextFrame = System.nanoTime();
 		long previousFrame = nextFrame;
@@ -67,6 +75,10 @@ public class Main {
 		AudioManager.dispose();
 		WindowManager.dispose();
 		System.exit(0);
+	}
+	
+	public static String readStream(InputStream is) throws IOException {
+		return new String(bigBuf, 0, is.read(bigBuf));
 	}
 	
 	public static float appTime() {

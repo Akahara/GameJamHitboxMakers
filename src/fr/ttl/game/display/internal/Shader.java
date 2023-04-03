@@ -1,13 +1,15 @@
 package fr.ttl.game.display.internal;
 
-import fr.ttl.game.Logger;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL20.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL20.*;
+import fr.ttl.game.Logger;
+import fr.ttl.game.Main;
 
 public class Shader {
 
@@ -40,7 +42,7 @@ public class Shader {
 		try (InputStream is = Shader.class.getResourceAsStream(shaderPath)) {
 			if(is == null)
 				throw new IOException("Resource " + shaderPath + " does not exist");
-			glShaderSource(shader, new String(is.readAllBytes()));
+			glShaderSource(shader, Main.readStream(is));
 		}
 		glCompileShader(shader);
 		if(glGetShaderi(shader, GL_COMPILE_STATUS) == GL_FALSE)

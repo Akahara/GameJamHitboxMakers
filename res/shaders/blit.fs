@@ -17,7 +17,7 @@ void main(void) {
   float v = uv.x*uv.y * 15.0;
   v = pow(v, 0.25);
   float r = 1./(1.+exp(-2.*(2.5-u_minResource)));
-  r *= max(cos(PI*2.*u_time*.4), 0) * .4 + .1;
+  r *= max(cos(PI*2.*u_time*.4), 0) * .6 + .2;
   v = (1.-v)*(1.-r)+v;
   color = texture(u_originTexture, v_uv);
   color = vec4(1.-v, .1, .1, 1)*(1.-v) + color*v;
